@@ -1,0 +1,106 @@
+﻿<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+    <pre style="margin: 0; line-height: 125%"><span style="color: #557799">#region Help:  Introduction to the script task</span>
+
+    <span style="color: #008800; font-weight: bold">public</span> <span style="color: #008800; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">Main</span>()
+        {
+    <span style="color: #888888">//TESTING CODE</span>
+    <span style="color: #888888">// MessageBox.Show(&quot;FileName: &quot; + Dts.Variables[&quot;FileName&quot;].Value.ToString() + &quot; MonthDigit: &quot; + Dts.Variables[&quot;MonthDigit&quot;].Value.ToString() +</span>
+    <span style="color: #888888">//  &quot; YearDigit: &quot; + Dts.Variables[&quot;YearDigit&quot;].Value.ToString() + &quot; DestinationFileFolder: &quot; + Dts.Variables[&quot;DestinationFileFolder&quot;].Value.ToString());</span>
+    <span style="color: #888888">//</span>
+    <span style="color: #008800; font-weight: bold">try</span>
+            {
+    <span style="color: #888888">//SET VARIABLES FOR SOURCE AND DESTINATION</span>
+    <span style="color: #333399; font-weight: bold">var</span> SourceFileFolder = Dts.Variables[<span style="background-color: #fff0f0">&quot;CorrespondenceSourceFileFolder&quot;</span>].Value.ToString();
+    <span style="color: #333399; font-weight: bold">var</span> SourceFileNameNoExtension = Dts.Variables[<span style="background-color: #fff0f0">&quot;FID&quot;</span>].Value.ToString();
+    <span style="color: #333399; font-weight: bold">var</span> DestinationFileFolder = Dts.Variables[<span style="background-color: #fff0f0">&quot;CorrespondenceDestinationFileFolder&quot;</span>].Value.ToString() + Dts.Variables[<span style="background-color: #fff0f0">&quot;YearDigit&quot;</span>].Value.ToString() + <span style="background-color: #fff0f0">&quot;\\&quot;</span> + Dts.Variables[<span style="background-color: #fff0f0">&quot;MonthDigit&quot;</span>].Value.ToString() + <span style="background-color: #fff0f0">&quot;\\&quot;</span>;
+    <span style="color: #333399; font-weight: bold">var</span> DestinationFilePath = <span style="background-color: #fff0f0">&quot;&quot;</span>;
+    <span style="color: #333399; font-weight: bold">var</span> SourceFilePathFull = <span style="background-color: #fff0f0">&quot;&quot;</span>;
+    <span style="color: #333399; font-weight: bold">string</span>[] destinationFiles = <span style="color: #008800; font-weight: bold">new</span> <span style="color: #333399; font-weight: bold">string</span>[<span style="color: #6600EE; font-weight: bold">0</span>];
+    <span style="color: #888888">//Vars for Error Logging</span>
+                Dts.Variables[<span style="background-color: #fff0f0">&quot;FIDError&quot;</span>].Value = Dts.Variables[<span style="background-color: #fff0f0">&quot;FID&quot;</span>].Value.ToString();
+                Dts.Variables[<span style="background-color: #fff0f0">&quot;InternalIDError&quot;</span>].Value = Dts.Variables[<span style="background-color: #fff0f0">&quot;InternalID&quot;</span>].Value.ToString();
+                Dts.Variables[<span style="background-color: #fff0f0">&quot;DateCorrespondenceError&quot;</span>].Value = Dts.Variables[<span style="background-color: #fff0f0">&quot;DateCorrespondence&quot;</span>].Value.ToString();
+    <span style="color: #888888">//LOOPING ROWS AND LOGGING TEST</span>
+    <span style="color: #888888">//if (SourceFileNameNoExtension== &quot;36121&quot;)</span>
+    <span style="color: #888888">//{</span>
+    <span style="color: #888888">//throw new IndexOutOfRangeException();</span>
+    <span style="color: #888888">//}</span>
+    <span style="color: #888888">//MessageBox.Show(&quot;InternalID: &quot; + Dts.Variables[&quot;InternalID&quot;].Value.ToString());</span>
+    <span style="color: #888888">//</span>
+    <span style="color: #888888">//IF DESTINATION FOLDER DOES NOT EXIST, CREATE IT</span>
+    <span style="color: #333399; font-weight: bold">var</span> sourcefiles = Directory.GetFiles(SourceFileFolder, SourceFileNameNoExtension + <span style="background-color: #fff0f0">&quot;.*&quot;</span>);
+    <span style="color: #008800; font-weight: bold">if</span> (Directory.Exists(DestinationFileFolder))
+                {
+                    destinationFiles = Directory.GetFiles(DestinationFileFolder, SourceFileNameNoExtension + <span style="background-color: #fff0f0">&quot;.*&quot;</span>);
+                }
+    <span style="color: #888888">//IF DESTINATION FILE DOES NOT EXIST</span>
+    <span style="color: #008800; font-weight: bold">if</span> (destinationFiles.Length == <span style="color: #6600EE; font-weight: bold">0</span>)
+                {
+    <span style="color: #888888">//CHECK IF SOURCE FILE EXISTS</span>
+    <span style="color: #008800; font-weight: bold">if</span> (sourcefiles.Length &gt; <span style="color: #6600EE; font-weight: bold">0</span>)
+                    {
+                        DestinationFilePath = DestinationFileFolder + Path.GetFileName(sourcefiles[<span style="color: #6600EE; font-weight: bold">0</span>]);
+                        SourceFilePathFull = sourcefiles[<span style="color: #6600EE; font-weight: bold">0</span>];
+    <span style="color: #888888">//IF DESTINATION FOLDER DOES NOT EXIST YET, CREATE IT</span>
+    <span style="color: #008800; font-weight: bold">if</span> (!Directory.Exists(DestinationFileFolder))
+                        {
+                            Directory.CreateDirectory(DestinationFileFolder);
+                        }
+    <span style="color: #888888">//IF DESTINATION FILE DOES NOT EXIST YET COPY IT AND DELETE IT FROM SOURCE</span>
+    <span style="color: #008800; font-weight: bold">if</span> (!File.Exists(DestinationFilePath))
+                        {
+                            File.Copy(SourceFilePathFull, DestinationFilePath);
+                            File.Delete(SourceFilePathFull);
+                        }
+                    }
+    <span style="color: #888888">//FILE IN DATATABLE DOES NOT EXIST AT SOURCE, ADD MESSAGE IN DESTINATION FILEPATH COLUMN</span>
+    <span style="color: #008800; font-weight: bold">else</span>
+                    {
+                        DestinationFilePath = <span style="background-color: #fff0f0">&quot;File does not exist at source&quot;</span>;
+                    }
+                    Dts.Variables[<span style="background-color: #fff0f0">&quot;DestinationFilePath&quot;</span>].Value = DestinationFilePath;
+                }
+    <span style="color: #008800; font-weight: bold">else</span>
+                {
+                    Dts.Variables[<span style="background-color: #fff0f0">&quot;DestinationFilePath&quot;</span>].Value = DestinationFileFolder + Path.GetFileName(destinationFiles[<span style="color: #6600EE; font-weight: bold">0</span>]);
+                }
+    <span style="color: #888888">//LOOPING AND LOGGING TEST</span>
+    <span style="color: #888888">//throw new  IndexOutOfRangeException();</span>
+            }
+    <span style="color: #888888">//RUNTIME ERROR LOGGED.  THIS ERROR WILL BE PROPAGATED AS A NEW FIREINFORMATION EVENT AT THE EVENTS LEVEL, DEBUGGING INFO WILL BE LOGGED AND THE LOOP WILL CONTINUE</span>
+    <span style="color: #008800; font-weight: bold">catch</span> (Exception ex)
+            {
+    <span style="color: #333399; font-weight: bold">bool</span> fireAgain = <span style="color: #008800; font-weight: bold">false</span>;
+                Dts.Events.FireInformation(<span style="color: #6600EE; font-weight: bold">0</span>, <span style="background-color: #fff0f0">&quot;Script Task Information Error - CREATE FOLDER AND MOVE FILE&quot;</span>, <span style="background-color: #fff0f0">&quot;FID: &quot;</span> + Dts.Variables[<span style="background-color: #fff0f0">&quot;FID&quot;</span>].Value.ToString() + <span style="background-color: #fff0f0">&quot; InternalID: &quot;</span> + Dts.Variables[<span style="background-color: #fff0f0">&quot;InternalID&quot;</span>].Value.ToString() + <span style="background-color: #fff0f0">&quot;\r ERROR: &quot;</span> + ex.Message + <span style="background-color: #fff0f0">&quot;\r&quot;</span> + ex.StackTrace, String.Empty, <span style="color: #6600EE; font-weight: bold">0</span>, <span style="color: #008800; font-weight: bold">ref</span> fireAgain);
+                Dts.Events.FireError(<span style="color: #6600EE; font-weight: bold">0</span>, <span style="background-color: #fff0f0">&quot;Script Task Error Error - CREATE FOLDER AND MOVE FILE&quot;</span>, <span style="background-color: #fff0f0">&quot;FID: &quot;</span> + Dts.Variables[<span style="background-color: #fff0f0">&quot;FID&quot;</span>].Value.ToString() + <span style="background-color: #fff0f0">&quot; InternalID: &quot;</span> + Dts.Variables[<span style="background-color: #fff0f0">&quot;InternalID&quot;</span>].Value.ToString() + <span style="background-color: #fff0f0">&quot;\r ERROR: &quot;</span> + ex.Message + <span style="background-color: #fff0f0">&quot;\r&quot;</span> + ex.StackTrace, String.Empty, <span style="color: #6600EE; font-weight: bold">0</span>);
+                Dts.Variables[<span style="background-color: #fff0f0">&quot;ErrorCount&quot;</span>].Value = (<span style="color: #333399; font-weight: bold">int</span>)Dts.Variables[<span style="background-color: #fff0f0">&quot;ErrorCount&quot;</span>].Value + <span style="color: #6600EE; font-weight: bold">1</span>;
+            }
+    <span style="color: #008800; font-weight: bold">finally</span>
+            {
+    <span style="color: #008800; font-weight: bold">if</span> ((<span style="color: #333399; font-weight: bold">int</span>)Dts.Variables[<span style="background-color: #fff0f0">&quot;ErrorCount&quot;</span>].Value &gt; <span style="color: #6600EE; font-weight: bold">10</span>)
+                {
+                    Dts.TaskResult = (<span style="color: #333399; font-weight: bold">int</span>)ScriptResults.Failure;
+                }
+    <span style="color: #008800; font-weight: bold">else</span>
+                {
+                    Dts.TaskResult = (<span style="color: #333399; font-weight: bold">int</span>)ScriptResults.Success;
+                }
+            }
+        }
+    <span style="color: #557799">#region ScriptResults declaration</span>
+    <span style="color: #888888">/// &lt;summary&gt;</span>
+    <span style="color: #888888">/// This enum provides a convenient shorthand within the scope of this class for setting the</span>
+    <span style="color: #888888">/// result of the script.</span>
+    <span style="color: #888888">/// </span>
+    <span style="color: #888888">/// This code was generated automatically.</span>
+    <span style="color: #888888">/// &lt;/summary&gt;</span>
+    <span style="color: #008800; font-weight: bold">enum</span> ScriptResults
+        {
+            Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
+            Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
+        };
+    <span style="color: #557799">#endregion</span>
+    }
+}
+</pre>
+</div>
