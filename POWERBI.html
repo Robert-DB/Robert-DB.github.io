@@ -6,7 +6,7 @@
 -->
 <html>
 <head>
-    <title>SSIS</title>
+    <title>POWER BI</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -60,29 +60,36 @@
         <!-- Main -->
         <div id="main">
             <div class="inner">
-                <h1>SSIS</h1>
-                <h2>Database Data Exported to a Large XML File</h2>
-                <p>
-                    This project presented mant challenges, from handling large volumns of data to generating XML in a very precise format that included the ordering of identically named XML nodes, which is very unusual, and a deep nesting of nodes with attribute-based logic. 
-                    <br /><br /><a  href="Content/SSIS/XMLPackage.htm">The SSIS Package Workflow</a>
-                    <br /><br /><br />
-                    A formula to parse the date from a file name.
-                    <br /><br /><a href="Content/SSIS/XMLParseDate.htm">Formula</a>
-                    <br /><br /><br />
-                    I wrote a stored procedure that generates valid XML and inserts it into a table. There was too much data to write directly to a file so I insert the XML into an XML data-type column first and then BCP this XML to a file. I needed to devise C# code that could clean the file line by line due to the size of the data as I could not use C# XML extensions since the data could not fit into memory.  The SQL script is thousands of lines long, due to the repetitive nature of FOR XML EXPLICIT.  I decided that XML EXPLICIT was the most SQL Server-centric method to use for this specific project and would be sustainable without the ongoing purchase and maintenance of 3rd party tools. These records, tens of millions of lines of XML before shrinking, for hundreds of thousands of medical professionals, is ordered and cleaned up before the XML is validated against the industry standard MedBiquitous XSD file before zipping and sending via SFTP. <br />It was a fun challenge and I learned a lot while working on this project!
-                    <br /><br /><a href="Content/SSIS/XMLSQL.htm">Code to Generate XML</a>&nbsp;&nbsp;&nbsp;<a href="http://ns.medbiq.org/member/v1/">MedBiquitous Schemas</a>
-                    <br /><br /><br />
-                    I used an XSLT tranformation to order nodes and remove confidential data.
-                    <br /><br /><a href="Content/SSIS/XMLXSLT.htm">XSLT Code</a>
-
+                <h1>POWER BI</h1>
+                <h2>A specific POWER BI project from data sourcing and wrangling to analysis and visualizations</h2>
+                <p>This report was done for friend, who is an Urban Planner, who asked me to look at the demographic changes in certain counties (8 counties in the Delaware Valley Region), and one township, for a project she was working on with AARP.  AARP's membership is for people 50 years old and above.  Most demographic data is looking at senior citizens which are usually defined as 65 and older and this was part of the challenge of this directive.
                 </p>
-                <h2>Migrating Oracle Data and copying Files to a New Folder Structure</h2>
                 <p>
-                    This package checks for two different types of files, with IDs positive or negative, so we could do the migration in stages.
-                    <br /><br /><a href="Content/SSIS/FilesWorkFlow.htm">The SSIS Package Workflow</a>
-                    <br /><br /><a href="Content/SSIS/FileManipulation/CorrespondenceFileCopyMoveScript.html">C# Script Task Code</a>
+                    I started by finding data sources online, and I ended up using U.S. Census data in its raw form for the years 2011 and 2017.  The first data document I downloaded had census data for all U.S. counties.  Another set of data had Newtown Township demographic data in percentages of the total township population.
                 </p>
-</div>
+                <p>
+                    The bulk of this project was wrangling the data into a usable form, creating the Power BI data model and calculations for analytics, and then finally, creating the report.
+                </p>
+                <p>
+                    Here is a small sample of the data for U.S. Counties.
+                    <br /><br /><a href="Content/POWERBI/SampleSourceFileUSCensus.JPG">Counties Data</a>
+                    <br /><br /><br />
+                    Sample of the raw data for Newtown Township.
+                    <br /><br /><a href="Content/POWERBI/NewTownDataSource_Percent.JPG">Township Data</a>
+                    <br /><br /><br />
+                    The final data source model tables were created by extracting, parsing, standardizing, cleansing and consolidating the raw data.  DAX calculations were used to convert some data into a usable form and to provide some simple but effective analysis of the demographic changes over time for the 50+ demographic.  The final data set used by the report is expanded to see the rows of data.
+                    <br /><br /><a href="Content/POWERBI/DataSources.JPG">Data Sources</a>
+                    <br /><br /><br />
+                    The main page of the report.
+                    <br /><br /><a href="Content/POWERBI/Page1_50pSelected.JPG">50+ Selected</a>
+                    &nbsp;&nbsp;
+                                                                                                <a href="Content/POWERBI/Page1_80pSelected.JPG">80+ Selected</a>
+                    <br /><br /><br />
+                    Drilldown to view detail for a single county.
+                    <br /><br /><a href="Content/POWERBI/Page2MercerCountyDrilldown.JPG">Mercer County</a>
+                </p>
+               
+            </div>
         </div>
 
 
